@@ -10,13 +10,6 @@ exports.uploadRecord = async (req, res) => {
 
     const record = req.files.record;
 
-    if (!validateRequest(req)) {
-        return res.status(400).json({
-            status: 'fail',
-            message: 'Invalid request.'
-        });
-    }
-
     const fileName = `${counter} ${record.name}`;
     const path = `${__dirname}/recordsData/audio/${fileName}`;
 
@@ -29,10 +22,21 @@ exports.uploadRecord = async (req, res) => {
             });
         }
 
+        saveParams(req);
+
         counter++;
         res.status(200).json({
             status: 'success',
             message: 'File uploaded successfully.'
         });
     });
+}
+
+function saveParams(req){
+    body = req.body;
+    tuple = `${counter},${body.text},${body.order},${body.name},${body.command}`;
+    // write this tuple as a new line in the csv file
+    //code here
+    //
+    //
 }

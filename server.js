@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(fileUpload());
 app.use(express.static(`${__dirname}/public`));
 
-app.use('/api/v1/record', require('./routes/recrodRoutes'));
+app.use('/api/v1/record', require('./routes/recordRoutes'));
 
 
 const PORT = process.env.PORT || 5000;

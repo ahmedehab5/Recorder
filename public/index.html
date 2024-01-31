@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Recorder</title>
+</head>
+<body>
+  <h1>Voice Recorder</h1>
+  <form id="uploadForm">
+    <input type="file" accept="audio/*" id="voiceInput" name="voice">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <button type="button" onclick="uploadVoice()">Upload Voice</button>
+  </form>
+
+  <script>
+    function uploadVoice() {
+      const form = document.getElementById('uploadForm');
+      const formData = new FormData(form);
+
+      // You can append additional JSON data to the FormData object
+      const additionalData = {
+        key1: 'value1',
+        key2: 'value2',
+      };
+
+      Object.entries(additionalData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      fetch('api/v1/record/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.text())
+      .then(message => {
+        console.log(message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html>
