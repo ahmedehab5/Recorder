@@ -11,9 +11,9 @@ exports.uploadRecord = async (req, res) => {
         });
     }
 
-    const voice = req.files.voice;
+    const voice = req.files.audio;
 
-    const fileName = `${counter}.mp3`;
+    const fileName = `${counter}.wav`;
     const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
 
     voice.mv(path, async (err) => {
