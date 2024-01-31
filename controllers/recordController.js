@@ -1,6 +1,9 @@
-const validateRequest = require('../models/recordModel');
+const fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
 counter = 0;
 exports.uploadRecord = async (req, res) => {
+    saveParams(req);
     if (!req.files) {
         return res.status(400).json({
             status: 'fail',
@@ -8,12 +11,12 @@ exports.uploadRecord = async (req, res) => {
         });
     }
 
-    const record = req.files.record;
+    const voice = req.files.voice;
 
-    const fileName = `${counter} ${record.name}`;
-    const path = `${__dirname}/recordsData/audio/${fileName}`;
+    const fileName = `${counter}.mp3`;
+    const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
 
-    record.mv(path, async (err) => {
+    voice.mv(path, async (err) => {
         if (err) {
             console.error(err);
             return res.status(500).json({
@@ -22,7 +25,6 @@ exports.uploadRecord = async (req, res) => {
             });
         }
 
-        saveParams(req);
 
         counter++;
         res.status(200).json({
@@ -34,9 +36,13 @@ exports.uploadRecord = async (req, res) => {
 
 function saveParams(req){
     body = req.body;
-    tuple = `${counter},${body.text},${body.order},${body.name},${body.command}`;
-    // write this tuple as a new line in the csv file
-    //code here
-    //
-    //
+    tuple = `${counter},${body.text},${body.order},${body.name},${body.command}\n`;
+    
+    fs.appendFile('recordsData/dataset.csv', tuple, (err) => {
+        if (err) {
+          console.error('Error writing to file:', err);
+          return;
+        }
+    });
+      
 }

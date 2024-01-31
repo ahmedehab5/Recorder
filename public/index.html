@@ -18,11 +18,14 @@
     function uploadVoice() {
       const form = document.getElementById('uploadForm');
       const formData = new FormData(form);
+      
 
       // You can append additional JSON data to the FormData object
       const additionalData = {
-        key1: 'value1',
-        key2: 'value2',
+        text: 'value1',
+        order: 'value2',
+        name: null,
+        command: 'value4',
       };
 
       Object.entries(additionalData).forEach(([key, value]) => {
