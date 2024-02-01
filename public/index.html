@@ -1,49 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voice Recorder</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Recorder</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Voice Recorder</h1>
-  <form id="uploadForm">
-    <input type="file" accept="audio/*" id="voiceInput" name="voice">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
-    <button type="button" onclick="uploadVoice()">Upload Voice</button>
-  </form>
-
-  <script>
-    function uploadVoice() {
-      const form = document.getElementById('uploadForm');
-      const formData = new FormData(form);
-      
-
-      // You can append additional JSON data to the FormData object
-      const additionalData = {
-        text: 'value1',
-        order: 'value2',
-        name: null,
-        command: 'value4',
-      };
-
-      Object.entries(additionalData).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      fetch('api/v1/record/upload', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.text())
-      .then(message => {
-        console.log(message);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    }
-  </script>
+    <div id="category">
+        <button id="call">اتصل</button>
+        <button id="endCall">انهاء</button>
+        <button id="openChat">فتح محادثة</button>
+        <button id="closeChat">غلق محادثة</button>
+        <button id="opennedChat">محادثة مفتوحة</button>
+        <button id="readMessages">اقرأ الرسائل</button>
+        <button id="textMessage">رسالة نصية</button>
+        <button id="voiceMessage">رسالة صوتية</button>
+        <button id="block">حظر</button>
+        <button id="unblock">فك حظر</button>
+    </div>
+    <div>
+        <p id="sentence">ارسل رسالة نصية الى علي محمد مجدي</p>
+    </div>
+    <div>
+        <audio id="audio" controls></audio>
+    </div>
+    <div id="recordingsList">
+        <button id="startRecord"></button>
+        <button id="stopRecord" disabled></button>
+        <button id="deleteRecord" disabled></button>
+    </div>
+    <div>
+        <button id="send">ارسال</button>
+    </div>
+    <div id="controls">
+        <button id="previous">السابق</button>
+        <button id="next">التالي</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

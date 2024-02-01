@@ -1,73 +1,101 @@
 document.addEventListener('DOMContentLoaded', () => {
     const startRecordButton = document.getElementById('startRecord');
     const stopRecordButton = document.getElementById('stopRecord');
-    const playbackButton = document.getElementById('playback');
+    const deleteRecordButton = document.getElementById('deleteRecord');
     const audioElement = document.getElementById('audio');
 
     let recorder;
     let audioChunks = [];
+    let timerInterval;
+    let elapsedTime = 0;
+    const maxRecordingTime = 10; // Set the maximum recording time limit in seconds
 
     startRecordButton.addEventListener('click', startRecording);
     stopRecordButton.addEventListener('click', stopRecording);
-    playbackButton.addEventListener('click', playbackRecording);
+    deleteRecordButton.addEventListener('click', deleteRecord);
 
-    async function startRecording() {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        recorder = new MediaRecorder(stream);
+    function startRecording() {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then((stream) => {
+                recorder = new MediaRecorder(stream);
 
-        recorder.ondataavailable = (e) => {
-            if (e.data.size > 0) {
-                audioChunks.push(e.data);
-            }
-        };
+                recorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) {
+                        audioChunks.push(e.data);
+                    }
+                };
 
-        recorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-            const audioUrl = URL.createObjectURL(audioBlob);
-            audioElement.src = audioUrl;
+                recorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioElement.src = audioUrl;
 
-            playbackButton.disabled = false;
+                    deleteRecordButton.disabled = false;
+                    clearInterval(timerInterval);
+                    elapsedTime = 0;
+                    startRecordButton.disabled = true;
 
-            const formData = new FormData();
-            formData.append('audio', audioBlob, 'recording.wav');
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.wav');
 
-            const additionalData = {
-                text: 'value1',
-                order: 'value2',
-                name: null,
-                command: 'value4',
-            };
-        
-            Object.entries(additionalData).forEach(([key, value]) => {
-                formData.append(key, value);
-            });
-        
-            fetch('api/v1/record/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Audio data sent:', data);
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Audio data sent:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error sending audio data:', error);
+                    });
+                };
+
+                recorder.onstart = () => {
+                    timerInterval = setInterval(() => {
+                        updateElapsedTime();
+                        if (elapsedTime >= maxRecordingTime) {
+                            stopRecording(); // Automatically stop recording after reaching the time limit
+                        }
+                    }, 1000);
+                };
+
+                recorder.start();
+                startRecordButton.disabled = true;
+                stopRecordButton.disabled = false;
+                deleteRecordButton.disabled = true;
             })
             .catch(error => {
-                console.error('Error sending audio data:', error);
+                console.error('Error accessing microphone:', error);
             });
-        };
-
-        recorder.start();
-        startRecordButton.disabled = true;
-        stopRecordButton.disabled = false;
-        playbackButton.disabled = true;
     }
 
     function stopRecording() {
         recorder.stop();
-        startRecordButton.disabled = false;
+        startRecordButton.disabled = true;
         stopRecordButton.disabled = true;
+        deleteRecordButton.disabled = false;
     }
 
-    function playbackRecording() {
-        audioElement.play();
+    function deleteRecord() {
+        audioElement.src = '';
+        deleteRecordButton.disabled = true;
+        stopRecordButton.disabled = true;
+        audioChunks = [];
+        clearInterval(timerInterval);
+        elapsedTime = 0;
+        updateElapsedTime();
+        startRecordButton.disabled = false; // Enable start button when recorded audio is deleted
+    }
+
+    function updateElapsedTime() {
+        elapsedTime++;
+        audioElement.setAttribute('data-time', formatTime(elapsedTime));
+    }
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
 });
