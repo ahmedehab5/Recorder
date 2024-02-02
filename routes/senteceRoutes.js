@@ -20,6 +20,10 @@ router
 .get(sentenceController.closeChat);
 
 router
+.route('/opnnedChat')
+.get(sentenceController.opennedChat);
+
+router
 .route('/readMessages')
 .get(sentenceController.readMessages);
 
