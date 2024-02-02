@@ -1,21 +1,27 @@
 const fs = require('fs');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 counter = 0;
 exports.uploadRecord = async (req, res) => {
-    saveParams(req);
     if (!req.files) {
         return res.status(400).json({
             status: 'fail',
             message: 'No files were uploaded.'
         });
     }
-
-    const voice = req.files.audio;
-
-    const fileName = `${counter}.wav`;
-    const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
-
+    
+    try{
+        const voice = req.files.audio;
+        
+        const fileName = `${counter}.wav`;
+        const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
+    }catch(err){
+        return res.status(500).json({
+            status: 'fail',
+            message: 'cant get audio name or path '
+        });
+        console.log('cant get audio name or path');
+    }
+    
     voice.mv(path, async (err) => {
         if (err) {
             console.error(err);
@@ -24,8 +30,17 @@ exports.uploadRecord = async (req, res) => {
                 message: 'Server error.'
             });
         }
-
-
+        
+        try{
+            saveParams(req);
+        }
+        catch(err){
+            return res.status(500).json({
+                status:'fail',
+                message:'cant save parameters to csv'
+            });
+            console.log('cant save parameters to csv');
+        }
         counter++;
         res.status(200).json({
             status: 'success',
