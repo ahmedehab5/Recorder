@@ -74,11 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const formData = new FormData();
                     formData.append('audio', audioBlob, 'recording.wav');
                     const additionalData = {
-                        index: 'value0',
-                        text: 'value1',
-                        order: 'value2',
-                        name: null,
-                        command: 'value4',
+                        index: index,
+                        text: text,
+                        order: order,
+                        name: name,
+                        command: command,
                     };
                 
                     Object.entries(additionalData).forEach(([key, value]) => {
@@ -146,16 +146,177 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
 
-    function send(){
+    function send(){}
 
-    }
-
-    async function call() {
+        function call() {
         command = 'call';
-        const res = await fetch('api/v1/sentence/call');
-        const data = await res.json();
-        console.log(data.data);
-        sentenceLabel.textContent = data.data.text;
-        // set the variables order, name, command......
+        fetch('api/v1/sentence/call')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Call sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting call sentence:', error);
+            });
     }
+
+    function endCall() {
+        command = 'endCall';
+        fetch('api/v1/sentence/endCall')
+            .then(response => response.json())
+            .then(data => {
+                console.log('End call sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting end call sentence:', error);
+            });
+    }
+
+    function openChat() {
+        command = 'openChat';
+        fetch('api/v1/sentence/openChat')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Open chat sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting open chat sentence:', error);
+            });
+    }
+
+    function closeChat() {
+        command = 'closeChat';
+        fetch('api/v1/sentence/closeChat')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Close chat sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting close chat sentence:', error);
+            });
+    }
+
+    function openedChat() {
+        command = 'openedChat';
+        fetch('api/v1/sentence/openedChat')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Opened chat sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting opened chat sentence:', error);
+            });
+    }
+
+    function readMessages() {
+        command = 'readMessages';
+        fetch('api/v1/sentence/readMessages')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Read messages sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting read messages sentence:', error);
+            });
+    }
+
+    function textMessage() {
+        command = 'textMessage';
+        fetch('api/v1/sentence/textMessage')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Text message sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting text message sentence:', error);
+            });
+    }
+
+    function voiceMessage() {
+        command = 'voiceMessage';
+        fetch('api/v1/sentence/voiceMessage')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Voice message sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting voice message sentence:', error);
+            });
+    }
+
+    function block() {
+        command = 'block';
+        fetch('api/v1/sentence/block')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Block sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting block sentence:', error);
+            });
+    }
+
+    function unblock() {
+        command = 'unblock';
+        fetch('api/v1/sentence/unblock')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Unblock sentence:', data);
+                index = data.data.index;
+                text = data.data.text;
+                order = data.data.order;
+                name = data.data.name;
+                sentenceLabel.textContent = text;
+            })
+            .catch(error => {
+                console.error('Error getting unblock sentence:', error);
+            });
+    }
+
+    
 });

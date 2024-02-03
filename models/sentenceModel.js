@@ -20,8 +20,12 @@ class Sentence {
     }
 
     checkNameInSentence(sentence){
-        const name = this.getRandName();
-        return [sentence.replace(/x/g, name), name];
+        if (sentence.includes('x')){
+            let name = this.getRandName();
+            return [sentence.replace(/x/g, name), name];
+        }
+        
+        return [sentence, ''];
     }
 
     getSentence(){

@@ -30,7 +30,7 @@ exports.uploadRecord = async (req, res) => {
         try{
             // uncomment it after handling the post request at frontend
             saveParams(req);
-            //sentences.get(req.body.command).pointerIncrement(req.body.index);
+            sentences.get(req.body.command).pointerIncrement(req.body.index);
         }
         catch(err){
             return res.status(500).json({

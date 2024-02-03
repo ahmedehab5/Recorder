@@ -26,18 +26,66 @@ exports.endCall = (req, res) =>{
     });
 }
 
-exports.openChat = (req, res) =>{}
+exports.openChat = (req, res) =>{
+    const sentence = getSentence('openChat');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.closeChat = (req, res) =>{}
+exports.closeChat = (req, res) =>{
+    const sentence = getSentence('closeChat');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.openedChat = (req, res) =>{}
+exports.openedChat = (req, res) =>{
+    const sentence = getSentence('openedChat');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.readMessages = (req, res) =>{}
+exports.readMessages = (req, res) =>{
+    const sentence = getSentence('readMessages');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.textMessage = (req, res) =>{}
+exports.textMessage = (req, res) =>{
+    const sentence = getSentence('textMessage');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.voiceMessage = (req, res) =>{}
+exports.voiceMessage = (req, res) =>{
+    const sentence = getSentence('voiceMessage');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.block = (req, res) =>{}
+exports.block = (req, res) =>{
+    const sentence = getSentence('block');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
 
-exports.unblock = (req, res) =>{}
+exports.unblock = (req, res) =>{
+    const sentence = getSentence('unblock');
+    res.status(200).json({
+        status: 'success',
+        data: sentence
+    });
+}
