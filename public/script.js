@@ -3,6 +3,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const stopRecordButton = document.getElementById('stopRecord');
     const deleteRecordButton = document.getElementById('deleteRecord');
     const audioElement = document.getElementById('audio');
+    const callButton = document.getElementById('call');
+    const endCallButton = document.getElementById('endCall');
+    const openChatButton = document.getElementById('openChat');
+    const closeChatButton = document.getElementById('closeChat');
+    const openedChatButton = document.getElementById('openedChat');
+    const readMessagesButton = document.getElementById('readMessages');
+    const textMessageButton = document.getElementById('textMessage');
+    const voiceMessageButton = document.getElementById('voiceMessage');
+    const blockButton = document.getElementById('block');
+    const unblockButton = document.getElementById('unblock');
+    const sendButton = document.getElementById('send');
+    const nextButton = document.getElementById('next');
+    const previousButton = document.getElementById('previous');
+
+    const sentenceLabel = document.getElementById('sentence');
+
+    callButton.addEventListener('click', call);
+    endCallButton.addEventListener('click', endCall);
+    openChatButton.addEventListener('click', openChat);
+    closeChatButton.addEventListener('click', closeChat);
+    openedChatButton.addEventListener('click', openedChat);
+    readMessagesButton.addEventListener('click', readMessages);
+    textMessageButton.addEventListener('click', textMessage);
+    voiceMessageButton.addEventListener('click', voiceMessage);
+    blockButton.addEventListener('click', block);
+    unblockButton.addEventListener('click', unblock);
+
+    sendButton.addEventListener('click', send)
+    nextButton.addEventListener('click', next);
+    previousButton.addEventListener('click', previous);
+
+    let index;
+    let text;
+    let order;
+    let name;
+    let command = 'call';
 
     let recorder;
     let audioChunks = [];
@@ -37,8 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const formData = new FormData();
                     formData.append('audio', audioBlob, 'recording.wav');
-
-                    fetch('/upload', {
+                    const additionalData = {
+                        index: 'value0',
+                        text: 'value1',
+                        order: 'value2',
+                        name: null,
+                        command: 'value4',
+                    };
+                
+                    Object.entries(additionalData).forEach(([key, value]) => {
+                        formData.append(key, value);
+                    });
+                
+                    fetch('api/v1/record/upload', {
                         method: 'POST',
                         body: formData
                     })
@@ -97,5 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    function send(){
+
+    }
+
+    async function call() {
+        command = 'call';
+        const res = await fetch('api/v1/sentence/call');
+        const data = await res.json();
+        console.log(data.data);
+        sentenceLabel.textContent = data.data.text;
+        // set the variables order, name, command......
     }
 });

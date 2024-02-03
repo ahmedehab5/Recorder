@@ -15,7 +15,7 @@ app.use(fileUpload());
 app.use(express.static(`${__dirname}/public`));
 
 app.use('/api/v1/record', require('./routes/recordRoutes'));
-app.use('/api/v1/sentece', require('./routes/sentenceRoutes'));
+app.use('/api/v1/sentence', require('./routes/sentenceRoutes'));
 
 
 const PORT = process.env.PORT || 5000;

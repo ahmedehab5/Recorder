@@ -1,6 +1,9 @@
 const fs = require('fs');
+const sentences = require('../models/sentenceModel').sentences;
 
-counter = 0;
+//counts the number of lines in the dataset.csv file
+counter = fs.readFileSync('recordsData/dataset.csv').toString().split('\n').length - 2;
+console.log('counter:', counter);
 exports.uploadRecord = async (req, res) => {
     if (!req.files) {
         return res.status(400).json({
@@ -9,18 +12,11 @@ exports.uploadRecord = async (req, res) => {
         });
     }
     
-    try{
-        const voice = req.files.audio;
-        
-        const fileName = `${counter}.wav`;
-        const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
-    }catch(err){
-        return res.status(500).json({
-            status: 'fail',
-            message: 'cant get audio name or path '
-        });
-        console.log('cant get audio name or path');
-    }
+    const voice = req.files.audio;
+    
+    const fileName = `${counter}.wav`;
+    const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
+    
     
     voice.mv(path, async (err) => {
         if (err) {
@@ -32,14 +28,15 @@ exports.uploadRecord = async (req, res) => {
         }
         
         try{
+            // uncomment it after handling the post request at frontend
             saveParams(req);
+            //sentences.get(req.body.command).pointerIncrement(req.body.index);
         }
         catch(err){
             return res.status(500).json({
                 status:'fail',
                 message:'cant save parameters to csv'
             });
-            console.log('cant save parameters to csv');
         }
         counter++;
         res.status(200).json({

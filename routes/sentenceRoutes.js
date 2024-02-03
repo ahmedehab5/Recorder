@@ -20,8 +20,8 @@ router
 .get(sentenceController.closeChat);
 
 router
-.route('/opnnedChat')
-.get(sentenceController.opennedChat);
+.route('/openedChat')
+.get(sentenceController.openedChat);
 
 router
 .route('/readMessages')
@@ -42,3 +42,5 @@ router
 router
 .route('/unblock')
 .get(sentenceController.unblock);
+
+module.exports = router;
