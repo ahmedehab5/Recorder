@@ -34,21 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
     nextButton.addEventListener('click', next);
     previousButton.addEventListener('click', previous);
 
+    startRecordButton.addEventListener('click', startRecording);
+    stopRecordButton.addEventListener('click', stopRecording);
+    deleteRecordButton.addEventListener('click', deleteRecord);
+
     let index;
     let text;
     let order;
     let name;
-    let command = 'call';
+    let command;
 
+    let audioBlob;
     let recorder;
     let audioChunks = [];
     let timerInterval;
     let elapsedTime = 0;
     const maxRecordingTime = 10; // Set the maximum recording time limit in seconds
 
-    startRecordButton.addEventListener('click', startRecording);
-    stopRecordButton.addEventListener('click', stopRecording);
-    deleteRecordButton.addEventListener('click', deleteRecord);
 
     function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 recorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioElement.src = audioUrl;
 
@@ -70,32 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(timerInterval);
                     elapsedTime = 0;
                     startRecordButton.disabled = true;
-
-                    const formData = new FormData();
-                    formData.append('audio', audioBlob, 'recording.wav');
-                    const additionalData = {
-                        index: index,
-                        text: text,
-                        order: order,
-                        name: name,
-                        command: command,
-                    };
-                
-                    Object.entries(additionalData).forEach(([key, value]) => {
-                        formData.append(key, value);
-                    });
-                
-                    fetch('api/v1/record/upload', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Audio data sent:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error sending audio data:', error);
-                    });
                 };
 
                 recorder.onstart = () => {
@@ -146,9 +122,41 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
 
-    function send(){}
+    function send(){
+        if (audioChunks.length === 0) {
+            alert('No audio to send');
+            return;
+        }
 
-        function call() {
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.wav');
+        const additionalData = {
+            index: index,
+            text: text,
+            order: order,
+            name: name,
+            command: command,
+        };
+    
+        Object.entries(additionalData).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+    
+        fetch('api/v1/record/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Audio data sent:', data);
+        })
+        .catch(error => {
+            console.error('Error sending audio data:', error);
+        });
+        deleteRecord();
+    }
+
+    function call() {
         command = 'call';
         fetch('api/v1/sentence/call')
             .then(response => response.json())
@@ -163,7 +171,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting call sentence:', error);
             });
+        previousButton.disabled = true;
+        nextButton.disabled = false;
     }
+    call();
 
     function endCall() {
         command = 'endCall';
@@ -180,6 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting end call sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function openChat() {
@@ -197,6 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting open chat sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function closeChat() {
@@ -214,6 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting close chat sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function openedChat() {
@@ -231,6 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting opened chat sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function readMessages() {
@@ -248,6 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting read messages sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function textMessage() {
@@ -265,6 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting text message sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function voiceMessage() {
@@ -282,6 +305,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting voice message sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function block() {
@@ -299,6 +324,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting block sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = false;
     }
 
     function unblock() {
@@ -316,7 +343,66 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error getting unblock sentence:', error);
             });
+        previousButton.disabled = false;
+        nextButton.disabled = true;
     }
 
+    function next(){
+        if(command === 'call'){
+            endCall();
+        } else if(command === 'endCall'){
+            openChat();
+        }
+        else if(command === 'openChat'){
+            closeChat();
+        }
+        else if(command === 'closeChat'){
+            openedChat();
+        }
+        else if(command === 'openedChat'){
+            readMessages();
+        }
+        else if(command === 'readMessages'){
+            textMessage();
+        }
+        else if(command === 'textMessage'){
+            voiceMessage();
+        }
+        else if(command === 'voiceMessage'){
+            block();
+        }
+        else if(command === 'block'){
+            unblock();
+        }
+    }
+
+    function previous(){
+        if(command === 'endCall'){
+            call();
+        } else if(command === 'openChat'){
+            endCall();
+        }
+        else if(command === 'closeChat'){
+            openChat();
+        }
+        else if(command === 'openedChat'){
+            closeChat();
+        }
+        else if(command === 'readMessages'){
+            openedChat();
+        }
+        else if(command === 'textMessage'){
+            readMessages();
+        }
+        else if(command === 'voiceMessage'){
+            textMessage();
+        }
+        else if(command === 'block'){
+            voiceMessage();
+        }
+        else if(command === 'unblock'){
+            block();
+        }
+    }
     
 });

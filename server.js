@@ -1,8 +1,14 @@
 const express = require('express');
+const fs = require('fs');
 const app = express();
 const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const https = require('https');
+const privateKey  = fs.readFileSync('ssl/host.key');
+const certificate = fs.readFileSync('ssl/host.cert');
+
+var credentials = {key: privateKey, cert: certificate};
 
 // Load env
 dotenv.config({ path: './config.env' });
@@ -17,10 +23,15 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/api/v1/record', require('./routes/recordRoutes'));
 app.use('/api/v1/sentence', require('./routes/sentenceRoutes'));
 
+var httpsServer = https.createServer(credentials, app);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+
+httpsServer.listen(PORT, () => {
     console.log(`App listening on port ${PORT}!`);
 });
+/*app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`);
+});*/
 
 

@@ -103,6 +103,10 @@ audio {
     border-color: #646464;
 }
 
+#previous:disabled {
+    opacity: 0.3;
+}
+
 #next {
     width: 110px;
     font-size: 23px;
@@ -112,4 +116,8 @@ audio {
     background-color: #000000;
     border-radius: 10px;
     border-color: #646464;
+}
+
+#next:disabled {
+    opacity: 0.3;
 }
