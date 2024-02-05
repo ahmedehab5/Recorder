@@ -1,4 +1,5 @@
-const names = ['محمد','علي','محمود','احمد','عبدالله','عبدالرحمن','عبدالعزيز','عبداللطيف','عبدالمجيد','عبدالحميد','سيد','سعيد','سعود','سلمان','سليمان','سامي','سامح','سامر'];
+const names = ['محمد','علي','محمود','احمد','عبدالله','عبدالرحمن','عبدالعزيز','سيد','سعيد','سلمان','سليمان','سامي','سامح','سامر','اسعد','زياد',
+                'وائل','طارق','ايهاب','صلاح','وليد','هاني','هادي','ياسر','بهاء','علاء','مهاب'];
 
 class Sentence {
     constructor(sentences){
@@ -21,7 +22,7 @@ class Sentence {
 
     checkNameInSentence(sentence){
         if (sentence.includes('x')){
-            let name = this.getRandName();
+            const name = this.getRandName();
             return [sentence.replace(/x/g, name), name];
         }
         
@@ -29,11 +30,12 @@ class Sentence {
     }
 
     getSentence(){
+        // order update to be used in the sentence
         const index = this.counter % this.sentences.length;
         const sentence = this.sentences[index];
-        const order = '';
-        const command = '';
-        const [renderedSentence, name] = this.checkNameInSentence(sentence);
+        const order = sentence[1];
+        const command = this.constructor.name;
+        const [renderedSentence, name] = this.checkNameInSentence(sentence[0]);
         return [renderedSentence, index , order , name , command];
     }
 
@@ -44,16 +46,53 @@ class Sentence {
     }
 }
 
-exports.call = new Sentence(['اتصل بx','اتصل على x']);
-exports.endCall = new Sentence(['انهي المكالمة','انهي الاتصال','اغلق المكالمة','اغلق الاتصال']);
-exports.openChat = new Sentence(['افتح الدردشة مع x','افتح الشات مع x','ابدأ الدردشة مع x','افتح المحادثة مع x']);
-exports.closeChat = new Sentence(['اغلق الدردشة','اغلق الشات','اغلق المحادثة','انهي الدردشة','انهي الشات','انهي المحادثة']);
-exports.openedChat = new Sentence(['محادثة من مفتوحة الان','هل توجد محادثة مفتوحة']);
-exports.readMessages = new Sentence(['اقرا رسائل x','اقرا الرسائل','اقرا الرسائل الواردة','اقرا الرسائل الجديدة']);
-exports.textMessage = new Sentence(['ارسل رسالة نصية الى x','ارسل رسالة الى x','ارسل رسالة نصية']);
-exports.voiceMessage = new Sentence(['ارسل رسالة صوتية الى x','ارسل رسالة صوتية']);
-exports.block = new Sentence(['قم بحظر x','قم بحظر الرقم','قم بحظر الرقم']);
-exports.unblock = new Sentence(['قم بفك الحظر عن x','قم بفك الحظر عن الرقم','قم بفك الحظر عن x']);
+exports.call = new Sentence([['اتصل بx','اتصل'],
+                            ['اتصل على x','اتصل'],
+                            ['اتصل','اتصل'],
+                            ['اتصال','اتصال'],
+                            ['مكالمة','مكالمة'],
+                            ['ابدا مكالمة مع x','مكالمة']]);
+
+exports.endCall = new Sentence([['انهي المكالمة','انهي المكالمة'],
+                               ['انهي الاتصال','انهي الاتصال'],
+                               ['اغلق المكالمة','اغلق المكالمة'],
+                               ['اغلق الاتصال','اغلق الاتصال']]);
+
+exports.openChat = new Sentence([['افتح الدردشة مع x','افتح الدردشة'],
+                                ['افتح الشات مع x','افتح الشات'],
+                                ['ابدأ الدردشة مع x','ابدأ الدردشة'],
+                                ['افتح المحادثة مع x','افتح المحادثة']
+                                ['افتح محادثة x','افتح محادثة'],
+                                ['افتح شات x','افتح شات']]);
+
+exports.closeChat = new Sentence([['اغلق الدردشة','اغلق الدردشة'],
+                                  ['اغلق الشات','اغلق الشات'],
+                                  ['اغلق المحادثة','اغلق المحادثة'],
+                                  ['انهي الدردشة','انهي الدردشة'],
+                                  ['انهي الشات','انهي الشات'],
+                                  ['انهي المحادثة','انهي المحادثة']]);
+
+exports.openedChat = new Sentence([['محادثة من مفتوحة الان','محادثة مفتوحة'],
+                                   ['هل توجد محادثة مفتوحة','محادثة مفتوحة'],
+                                    ['ما هي المحادثة الحالية','المحادثة الحالية']]);
+
+exports.readMessages = new Sentence([['اقرا رسائل x','اقرا رسائل'],
+                                     ['اقرا الرسائل','اقرا الرسائل']]);
+
+exports.textMessage = new Sentence([['ارسل رسالة نصية الى x','رسالة نصية'],
+                                    ['رسالة نصية الى x','رسالة نصية'],
+                                    ['ارسل رسالة نصية','رسالة نصية'],]);
+
+exports.voiceMessage = new Sentence([['ارسل رسالة صوتية الى x','رسالة صوتية'],
+                                     ['ارسل رسالة صوتية','رسالة صوتية'],]);
+
+exports.block = new Sentence([['قم بحظر x','حظر'],
+                              ['حظر','حظر'],
+                              ['حظر x','حظر']]);
+
+exports.unblock = new Sentence([['قم بفك الحظر عن x','فك الحظر'],
+                                ['فك الحظر عن x','فك الحظر'],
+                                ['فك الحظر','فك الحظر']]);
 
 const sentences = new Map();
 sentences.set('call', exports.call);
