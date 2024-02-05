@@ -27,11 +27,11 @@ var httpsServer = https.createServer(credentials, app);
 
 const PORT = process.env.PORT || 5000;
 
-httpsServer.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`);
-});
-/*app.listen(PORT, () => {
+/*httpsServer.listen(PORT, () => {
     console.log(`App listening on port ${PORT}!`);
 });*/
+app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`);
+});
 
 
