@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
+const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
@@ -12,6 +13,10 @@ var credentials = {key: privateKey, cert: certificate};
 
 // Load env
 dotenv.config({ path: './config.env' });
+
+// Connect to DB
+const DB = process.env.DATABASE_URL.replace('<password>', process.env.DATABASE_PASSWORD);
+mongoose.connect(DB, {}).then(() => console.log('DB connection successful!'));
 
 // Midelwares
 if (process.env.NODE_ENV === 'development') {
