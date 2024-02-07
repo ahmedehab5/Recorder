@@ -19,14 +19,14 @@ exports.uploadRecord = async (req, res) => {
     const fileName = `${counter}.wav`;
     //const path = `${__dirname.replace('/controllers','')}/recordsData/audio/${fileName}`;
     
-    voice.mv(path, async (err) => {
+    /*voice.mv(path, async (err) => {
         if (err) {
             console.error(err);
             return res.status(500).json({
                 status: 'fail',
                 message: 'Server error.'
             });
-        }
+        }*/
         
         try{
             Record.create({
@@ -50,7 +50,7 @@ exports.uploadRecord = async (req, res) => {
             status: 'success',
             message: 'File uploaded successfully.'
         });
-    });
+   // });
 }
 
 function saveParams(req){
