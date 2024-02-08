@@ -5,7 +5,8 @@ const recordSchema = new mongoose.Schema({
     text : String,
     order : String,
     name : String,
-    command : String
+    command : String,
+    audio : Buffer
 });
 
 module.exports = mongoose.model('Record', recordSchema);

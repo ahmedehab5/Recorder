@@ -22,21 +22,27 @@ mongoose.connect(DB, {}).then(() => console.log('DB connection successful!'));
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+//app.use(fileUpload());
 app.use(fileUpload());
+
+//public folder to quickly access files
 app.use(express.static(`${__dirname}/public`));
 
+
+// Routes
 app.use('/api/v1/record', require('./routes/recordRoutes'));
 app.use('/api/v1/sentence', require('./routes/sentenceRoutes'));
 
-var httpsServer = https.createServer(credentials, app);
 
 const PORT = process.env.PORT || 5000;
 
-/*httpsServer.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`);
-});*/
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}!`);
 });
+
+//const httpsServer = https.createServer(credentials, app);
+/*httpsServer.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`);
+});*/
 
 
