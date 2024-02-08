@@ -3,8 +3,14 @@ const Record = require('../models/recordModel');
 const sentences = require('../models/sentenceModel').sentences;
 
 counter = Number(process.env.COUNTER);
+async function setCounter(){
+    const noOfDocs = await Record.countDocuments();
+    counter += noOfDocs;
+    console.log('counter:', counter);
+}
 
-console.log('counter:', counter);
+setCounter();
+
 exports.uploadRecord = async (req, res) => {
     if (!req.files) {
         return res.status(400).json({
