@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send');
     const nextButton = document.getElementById('next');
     const previousButton = document.getElementById('previous');
+    const recordingStatus = document.getElementById('recordingStatus');
 
     const sentenceLabel = document.getElementById('sentence');
 
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let elapsedTime = 0;
     const maxRecordingTime = 10; // Set the maximum recording time limit in seconds
 
+    recordingStatus.hidden = true;
 
     function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -75,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 recorder.onstart = () => {
+                    recordingStatus.hidden = false;
                     timerInterval = setInterval(() => {
                         updateElapsedTime();
                         if (elapsedTime >= maxRecordingTime) {
@@ -98,12 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
         startRecordButton.disabled = true;
         stopRecordButton.disabled = true;
         deleteRecordButton.disabled = false;
+        recordingStatus.hidden = true;
     }
 
     function deleteRecord() {
         audioElement.src = '';
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
+        recordingStatus.hidden = true;
         audioChunks = [];
         clearInterval(timerInterval);
         elapsedTime = 0;

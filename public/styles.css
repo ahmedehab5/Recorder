@@ -121,3 +121,29 @@ audio {
 #next:disabled {
     opacity: 0.3;
 }
+
+#recordingStatus {
+    margin: 0px;
+    font-size: 15px;
+    color: #40a34a;
+    animation-name: ani;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes ani {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.75;
+    }
+}
+
+#recording {
+    padding: 10px;
+    height: 10px;
+}
