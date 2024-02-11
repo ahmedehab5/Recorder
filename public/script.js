@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function deleteRecord() {
         audioChunks = [];
+        recorder = null;
         URL.revokeObjectURL(audioElement.src);
         audioElement.src = '';
         deleteRecordButton.disabled = true;
