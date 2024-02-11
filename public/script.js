@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     stopRecordButton.addEventListener('click', stopWaveform);
     deleteRecordButton.addEventListener('click', stopWaveform);
     
+
     let index;
     let text;
     let order;
@@ -141,10 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function deleteRecord() {
-        audioElement.src = null;
+        audioElement.src = '';
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
-        audioChunks = [];
+        audioChunks.length = 0;
         clearInterval(timerInterval);
         elapsedTime = 0;
         updateElapsedTime();
