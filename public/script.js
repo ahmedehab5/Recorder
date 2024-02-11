@@ -142,10 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function deleteRecord() {
+        audioChunks = [];
+        URL.revokeObjectURL(audioElement.src);
         audioElement.src = '';
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
-        audioChunks.length = 0;
         clearInterval(timerInterval);
         elapsedTime = 0;
         updateElapsedTime();
