@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     previousButton.addEventListener('click', previous);
 
     startRecordButton.addEventListener('click', startRecording);
-    startRecordButton.addEventListener('click', togglePulse); // Add event listener to startRecordButton to toggle pulse animation
-    startRecordButton.addEventListener('click', toogleWaveForm);
+    //tartRecordButton.addEventListener('click', togglePulse); // Add event listener to startRecordButton to toggle pulse animation
+    //startRecordButton.addEventListener('click', toogleWaveForm);
     stopRecordButton.addEventListener('click', stopRecording);
     deleteRecordButton.addEventListener('click', deleteRecord);
     stopRecordButton.addEventListener('click', stopWaveform);
@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
     
                 recorder.onstart = () => {
+                    togglePulse();
+                    toogleWaveForm();
                     timerInterval = setInterval(() => {
                         updateElapsedTime();
                         if (elapsedTime >= maxRecordingTime) {
