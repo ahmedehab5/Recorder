@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateCategory(category) {
+        document.getElementById("dropdownMenuButton").innerText = category;
+    }
 
     function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -138,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function deleteRecord() {
-        audioElement.src = '';
+        audioElement.src = null;
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
         audioChunks = [];
@@ -215,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextButton.disabled = false;
     }
     call();
+    updateCategory('اتصال');
 
     function endCall() {
         command = 'endCall';
@@ -391,58 +395,76 @@ document.addEventListener('DOMContentLoaded', () => {
     function next(){
         if(command === 'call'){
             endCall();
+            updateCategory('انهاء الاتصال');
         } else if(command === 'endCall'){
             openChat();
+            updateCategory('فتح المحادثة');
         }
         else if(command === 'openChat'){
             closeChat();
+            updateCategory('غلق المحادثة');
         }
         else if(command === 'closeChat'){
             openedChat();
+            updateCategory('محادثة مفتوحة');
         }
         else if(command === 'openedChat'){
             readMessages();
+            updateCategory('اقراء الرسائل');
         }
         else if(command === 'readMessages'){
             textMessage();
+            updateCategory('رسالة نصية');
         }
         else if(command === 'textMessage'){
             voiceMessage();
+            updateCategory('رسالة صوتية');
         }
         else if(command === 'voiceMessage'){
             block();
+            updateCategory('حظر');
         }
         else if(command === 'block'){
             unblock();
+            updateCategory('فك الحظر');
         }
     }
 
     function previous(){
         if(command === 'endCall'){
             call();
+            updateCategory('اتصال');
         } else if(command === 'openChat'){
             endCall();
+            updateCategory('انهاء الاتصال');
         }
         else if(command === 'closeChat'){
             openChat();
+            updateCategory('فتح المحادثة');
         }
         else if(command === 'openedChat'){
             closeChat();
+            updateCategory('غلق المحادثة');
         }
         else if(command === 'readMessages'){
             openedChat();
+            updateCategory('محادثة مفتوحة');
         }
         else if(command === 'textMessage'){
             readMessages();
+            updateCategory('اقراء الرسائل');
         }
         else if(command === 'voiceMessage'){
             textMessage();
+            updateCategory('رسالة نصية');
         }
         else if(command === 'block'){
             voiceMessage();
+            updateCategory('رسالة صوتية');
         }
         else if(command === 'unblock'){
             block();
+            updateCategory('حظر');
         }
     }
     
