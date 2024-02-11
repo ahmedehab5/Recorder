@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send');
     const nextButton = document.getElementById('next');
     const previousButton = document.getElementById('previous');
-    const recordingStatus = document.getElementById('recordingStatus');
 
     const sentenceLabel = document.getElementById('sentence');
 
@@ -36,9 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
     previousButton.addEventListener('click', previous);
 
     startRecordButton.addEventListener('click', startRecording);
+    startRecordButton.addEventListener('click', togglePulse); // Add event listener to startRecordButton to toggle pulse animation
+    startRecordButton.addEventListener('click', toogleWaveForm);
     stopRecordButton.addEventListener('click', stopRecording);
     deleteRecordButton.addEventListener('click', deleteRecord);
-
+    stopRecordButton.addEventListener('click', stopWaveform);
+    deleteRecordButton.addEventListener('click', stopWaveform);
+    
     let index;
     let text;
     let order;
@@ -52,32 +55,58 @@ document.addEventListener('DOMContentLoaded', () => {
     let elapsedTime = 0;
     const maxRecordingTime = 10; // Set the maximum recording time limit in seconds
 
-    recordingStatus.hidden = true;
+    function toogleWaveForm() {
+        const bars = document.querySelectorAll('.bar');
+        for (let i = 0; i < bars.length; i++) {
+            bars.forEach(each => {
+                each.style.animationDuration = `${Math.random() * (0.75 - 0.25) + 0.25}s`; 
+            });
+        }
+    }
+
+    function stopWaveform() {
+        const bars = document.querySelectorAll('.bar');
+        bars.forEach(each => {
+            each.style.animationDuration = '0s';  // Set animation duration to 0 to stop the animation
+        });
+    }
+
+    function togglePulse() {
+        var startRecordButton = document.getElementById('startRecord');
+        if (!startRecordButton.classList.contains('pulsing')) {
+            startRecordButton.classList.add('pulsing'); // Add the "pulsing" class to start the pulse animation
+        } else {
+            startRecordButton.classList.remove('pulsing'); // Remove the "pulsing" class to stop the pulse animation
+        }
+    }
+
 
     function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then((stream) => {
                 recorder = new MediaRecorder(stream);
-
+    
                 recorder.ondataavailable = (e) => {
                     if (e.data.size > 0) {
                         audioChunks.push(e.data);
                     }
                 };
-
+    
                 recorder.onstop = () => {
                     audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioElement.src = audioUrl;
-
+    
                     deleteRecordButton.disabled = false;
                     clearInterval(timerInterval);
                     elapsedTime = 0;
                     startRecordButton.disabled = true;
+    
+                    // Add the line below to remove the "pulsing" class when recording stops
+                    startRecordButton.classList.remove('pulsing');
                 };
-
+    
                 recorder.onstart = () => {
-                    recordingStatus.hidden = false;
                     timerInterval = setInterval(() => {
                         updateElapsedTime();
                         if (elapsedTime >= maxRecordingTime) {
@@ -85,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }, 1000);
                 };
-
+    
                 recorder.start();
                 startRecordButton.disabled = true;
                 stopRecordButton.disabled = false;
@@ -95,25 +124,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error accessing microphone:', error);
             });
     }
-
+    
     function stopRecording() {
         recorder.stop();
         startRecordButton.disabled = true;
         stopRecordButton.disabled = true;
         deleteRecordButton.disabled = false;
-        recordingStatus.hidden = true;
+    
+        // Add the line below to remove the "pulsing" class when recording stops
+        startRecordButton.classList.remove('pulsing');
     }
-
+    
     function deleteRecord() {
         audioElement.src = '';
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
-        recordingStatus.hidden = true;
         audioChunks = [];
         clearInterval(timerInterval);
         elapsedTime = 0;
         updateElapsedTime();
         startRecordButton.disabled = false; // Enable start button when recorded audio is deleted
+    
+        // Add the line below to remove the "pulsing" class when recording is deleted
+        startRecordButton.classList.remove('pulsing');
     }
 
     function updateElapsedTime() {
@@ -351,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
         previousButton.disabled = false;
         nextButton.disabled = true;
     }
+    
 
     function next(){
         if(command === 'call'){
