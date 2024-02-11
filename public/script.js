@@ -145,7 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         audioChunks = [];
         recorder = null;
         URL.revokeObjectURL(audioElement.src);
-        audioElement.src = '';
+        audioElement.removeAttribute('src');
+        audioElement.load();
+        ////////////////////
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
         clearInterval(timerInterval);
