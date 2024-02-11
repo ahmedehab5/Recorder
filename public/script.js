@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
     
                 recorder.onstop = () => {
-                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioElement.src = audioUrl;
     
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const formData = new FormData();
-        formData.append('audio', audioBlob, 'recording.wav');
+        formData.append('audio', audioBlob, 'recording.mpeg');
         const additionalData = {
             index: index,
             text: text,
