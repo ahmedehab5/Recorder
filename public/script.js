@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     timerInterval = setInterval(() => {
                         updateElapsedTime();
                         if (elapsedTime >= maxRecordingTime) {
+                            stopWaveform();
                             stopRecording(); // Automatically stop recording after reaching the time limit
                         }
                     }, 1000);
@@ -145,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audioChunks = [];
         recorder = null;
         URL.revokeObjectURL(audioElement.src);
-        audioElement.removeAttribute('src');
+        //audioElement.removeAttribute('src');
         audioElement.load();
         ////////////////////
         deleteRecordButton.disabled = true;
