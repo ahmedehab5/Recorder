@@ -145,20 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteRecord() {
         audioChunks = [];
         recorder = null;
-        //audioElement.src = src;
-        //URL.revokeObjectURL(audioElement.src);
-        //audioElement.removeAttribute('src');
-        //audioElement.load();
 
-        // Select the div element
+        // Select the div element that will contain the audio element
         var div = document.getElementById('updateDiv');
 
-        // Change its content
         //Replace the content of the div with the new HTML Audio element
         div.innerHTML = '<audio id="audio" controls></audio>';
         audioElement = document.getElementById('audio');
 
-        ////////////////////
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
         clearInterval(timerInterval);
