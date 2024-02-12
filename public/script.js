@@ -145,9 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteRecord() {
         audioChunks = [];
         recorder = null;
+        audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioElement.src = audioUrl;
         //URL.revokeObjectURL(audioElement.src);
-        audioElement.removeAttribute('src');
-        audioElement.load();
+        //audioElement.removeAttribute('src');
+        //audioElement.load();
         ////////////////////
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
