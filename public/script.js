@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startRecordButton = document.getElementById('startRecord');
     const stopRecordButton = document.getElementById('stopRecord');
     const deleteRecordButton = document.getElementById('deleteRecord');
-    const audioElement = document.getElementById('audio');
+    let audioElement = document.getElementById('audio');
     const callButton = document.getElementById('call');
     const endCallButton = document.getElementById('endCall');
     const openChatButton = document.getElementById('openChat');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteRecordButton.addEventListener('click', deleteRecord);
     stopRecordButton.addEventListener('click', stopWaveform);
     deleteRecordButton.addEventListener('click', stopWaveform);
-    
+
 
     let index;
     let text;
@@ -145,12 +145,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteRecord() {
         audioChunks = [];
         recorder = null;
-        audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        audioElement.src = audioUrl;
+        //audioElement.src = src;
         //URL.revokeObjectURL(audioElement.src);
         //audioElement.removeAttribute('src');
         //audioElement.load();
+
+        // Select the div element
+        var div = document.getElementById('updateDiv');
+
+        // Change its content
+        //Replace the content of the div with the new HTML Audio element
+        div.innerHTML = '<audio id="audio" controls></audio>';
+        audioElement = document.getElementById('audio');
+
         ////////////////////
         deleteRecordButton.disabled = true;
         stopRecordButton.disabled = true;
@@ -162,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add the line below to remove the "pulsing" class when recording is deleted
         startRecordButton.classList.remove('pulsing');
     }
-
+    
     function updateElapsedTime() {
         elapsedTime++;
         audioElement.setAttribute('data-time', formatTime(elapsedTime));
